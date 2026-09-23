@@ -1,0 +1,11 @@
+Dataset: Creative goods: Bilateral trade by product group - Annual (analytical)
+
+Page Filters: 
+	Product: Music, performing and visual arts 
+	Partner: World 
+	Flow: Exports 
+
+
+Download Type: Pivot
+
+Language: English
