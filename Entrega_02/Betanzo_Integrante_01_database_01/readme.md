@@ -1,0 +1,21 @@
+# Historial de procesos y decisiones
+
+La base de datos fue construida con base en la información proporcionada por la [United Nations Trade and Development Data Hub](https://unctadstat.unctad.org/EN/About.html). Antes de comenzar a armar la base de datos propiamente tal, lo que se realizó fue una búsqueda exhaustiva de la información disponible en el sitio de Naciones Unidas y en el de la UNESCO, con el fin de obtener datos relacionados con el intercambio económico de productos culturales a nivel mundial.
+
+Al momento de la búsqueda, se decidió utilizar únicamente los datos entregados por Naciones Unidas, dado que se consideró que eran los más detallados y actualizados. Se intentó hacer calzar la información disponible con la entregada por la UNESCO, pero la categorización de los productos culturales no eran similares —lo que podría traer imprecisiones en los montos tranzados, ya que no corresponderían a los mismos—, por lo que se decidió no utilizarla al menos para esta base de datos en específico.
+
+Una vez se seleccionaron las fuentes, se utilizó la [herramienta interna de construcción de tablas](https://unctadstat.unctad.org/datacentre/dataviewer/US.CreativeGoodsValue) del sitio de la UNCTAD para comenzar a filtrar los datos que servirían para armar la base de datos final. En ese sentido, entre todos los países del mundo de los cuales Naciones Unidas poseía los datos del intercambio económico, se escogieron específicamente los siguientes; "China" (entendida como la China continental), "China, Hong Kong SAR", "China, Macao SAR" y "China, Taiwan Province". 
+
+Aparte de China (que representa el caso de estudio principal), se seleccionaron Corea del Sur y Japón al ser estas las mayores potencias culturales del Asia del este. Por su lado, la Unión Europea y Estados Unidos fueron seleccionados al ser las mayores hegemonías culturales occidentales, por lo cual representan los contrapesos naturales a las potencias asiáticas.
+
+Con lo anterior, se llevó a cabo la decisión de considerar a Hong Kong y Macao dentro de los datos de la China continental considerando su situación legal, lo que no es replicable con el territorio de Taiwán. Si bien Naciones Unidas (por motivos políticos) considera a Taiwán como un territorio chino con situación especial, *de facto* funciona y actúa como una nación completamente independiente y desconectada de China, por lo que debe de ser considerada como un agente completamente diferente.
+
+A continuación, se procedió a excluir todas aquellas categorías que hacían referencia a la manufactura de productos, tales como las joyas y similares, dado que a efectos de este trabajo solo se consideró relevantes aquellos ligados a lo audiovisual y la literatura. En específico, las categorías seleccionadas para el estudio fueron; "Audiovisual, multimedia and photography", "Books and publishing", "Music, performing and visual arts" y "Software, video games, computer and web services", que representa para estos efectos la categoría principal. Todas estas categorías se encuentran disponibles en el sitio web de la [UNCTAD](https://unctadstat.unctad.org/EN/Classifications/DimHS2022Products_Creatives_Hierarchy.pdf)
+
+La base de datos fue armada descargando un total de 13 tablas, divididas por los países seleccionados para la muestra, por tipo de producto y finalmente por tipo de flujo (importación o exportación de los bienes) a nivel mundial (es decir, el total de USD en millones importado o exportado a todo el conjunto de países estudiados por Naciones Unidas). Por último, se decidió añadir las exportaciones individuales de China al resto de países curados con el fin de descubrir con posterioridad en cuándo y a qué países China había aumentado o concentrado la mayoría de su comercio en términos culturales (con todas las categorías seleccionadas) y específicamente en software.
+
+Finalmente, algunos ejemplos de preguntas que se pueden responder con esta base de datos limpia son las siguientes:
+
+1. ¿En qué momento China dejó de ser principalmente una importadora de productos culturales a una exportadora?
+2. ¿De qué países recibe China mayoritariamente la inversión de productos culturales?
+3. ¿A qué países ha direccionado China principalmente su inversión en materia de productos de software?
