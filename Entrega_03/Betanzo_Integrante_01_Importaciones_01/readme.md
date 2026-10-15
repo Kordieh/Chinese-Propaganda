@@ -1,0 +1,7 @@
+# Explicación de la base de datos y visualización
+
+El trabajo de visualización comenzó selecionando la base de datos. Para esto, la base de datos utilizada fue la de la segunda entrega, la que corresponde a los flujos comerciales de China y otras potencias seleccionadas en diferentes productos culturales, ya sea en importaciones o exportaciones.
+
+La base de datos ya se encontraba completamente ordenada y estructurada gracias al trabajo realizado en la segunda entrega, por lo que no fue necesario realizar ningún tipo de cambio a ella dado que los datos de los que se disponía eran ya los más actualizados disponibles por la ONU. En ese sentido, la base de datos fue utilizada para este trabajo dado que correspondía a la más completa de las que se disponía, además de ser clave para la explicación del primer hito de la historia.
+
+Finalmente, algunas de las preguntas que puede responder esta visualización corresponden a las siguientes; ¿En qué momento China se transformó en un exportador mayoritario en materia cultural? ¿A qué países exporta mayormente China productos como el software y los videojuegos? ¿De qué países recibe China mayormente las inversiones en materia de software y videojuegos?
