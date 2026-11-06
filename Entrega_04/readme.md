@@ -46,7 +46,6 @@ Sigue la regla 60-30-10 para que el bermellón funcione como acento. El cian es 
 ### Link al prototipo
 
 - [Prototipo publicado](https://kordieh.github.io/Chinese-Government/)
-- [Wireframe en PDF](Wireframe_prototipo.pdf)
 
 ### Estructura y flujo
 
