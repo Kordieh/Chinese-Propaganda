@@ -1,6 +1,9 @@
 # Fuentes: Adquisiciones de Tencent
 
 * Lista de adquisiciones de Tencent: [PC Gamer](https://www.pcgamer.com/every-game-company-that-tencent-has-invested-in/)
+
+* Lista de adquisiciones de Tencent en 2020: [Millenium GG](https://www.millenium.gg/noticias/32052.html)
+
 * Adquisición de Larian Studios: [3D Juegos](https://www.3djuegos.com/juegos/baldurs-gate-3/noticias/no-vamos-a-vender-dungeons-dragons-tencent-parecia-interesada-comprar-licencia-rol-ello-baldurs-gate-3-ha-sido-desmentido)
 * Adquisición de Leyou Technologies: [Meristation](https://as.com/meristation/2020/12/24/noticias/1608790985_421931.html)
 * Adquisición de Supercell: [Reuters](https://www.reuters.com/article/business/chinas-tencent-buys-clash-of-clans-maker-supercell-for-86-billion-idUSKCN0Z716D/)
