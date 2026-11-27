@@ -15,6 +15,68 @@
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function () {
+        window.__docsPrefixStripped = false;
+        function resolveDocsPath(rawPath) {
+          if (window.__docsPrefixStripped && typeof rawPath === 'string' && rawPath.indexOf('docs/') === 0) {
+            return rawPath.slice(5);
+          }
+          return rawPath;
+        }
+        window.__resolveDocsPath = resolveDocsPath;
+
+        function upgradePendingDocsImages() {
+          var pending = document.querySelectorAll('img[src^="docs/"]');
+          for (var i = 0; i < pending.length; i += 1) {
+            if (!pending[i].complete || pending[i].naturalWidth === 0) {
+              tryStripDocsPrefix(pending[i]);
+            }
+          }
+        }
+
+        function tryStripDocsPrefix(imgEl) {
+          if (!imgEl || imgEl.dataset.docsFallbackTried === '1') return false;
+          var rawSrc = imgEl.getAttribute('src') || '';
+          if (rawSrc.indexOf('docs/') === 0) {
+            imgEl.dataset.docsFallbackTried = '1';
+            imgEl.dataset.fallbackTried = '1';
+            imgEl.addEventListener(
+              'load',
+              function () {
+                if (!window.__docsPrefixStripped) {
+                  window.__docsPrefixStripped = true;
+                  upgradePendingDocsImages();
+                }
+              },
+              { once: true }
+            );
+            imgEl.setAttribute('src', rawSrc.slice(5));
+            return true;
+          }
+          return false;
+        }
+        window.__tryStripDocsPrefix = tryStripDocsPrefix;
+        document.addEventListener(
+          'error',
+          function (evt) {
+            var target = evt && evt.target;
+            if (target && target.tagName === 'IMG' && tryStripDocsPrefix(target)) {
+              evt.stopPropagation();
+            }
+          },
+          true
+        );
+        document.addEventListener('DOMContentLoaded', function () {
+          var imgs = document.querySelectorAll('img[src^="docs/"]');
+          for (var i = 0; i < imgs.length; i += 1) {
+            if (imgs[i].complete && imgs[i].naturalWidth === 0) {
+              tryStripDocsPrefix(imgs[i]);
+            }
+          }
+        });
+      })();
+    </script>
 
     <!-- Tipografías de la nueva guía de identidad visual:
          Maoken Assorted Sans (+ Bricolage Grotesque / Noto Serif SC), Inter, LT Generic Serif (+ Source Serif 4) -->
@@ -6390,7 +6452,7 @@
                   <img
                     id="asia-sakura-branch-img"
                     class="asia-sakura-branch-img"
-                    src="/assets/aistudio/rama_cerezo_2fc038e6.png"
+                    src="docs/imagenes/rama_cerezo.png"
                     alt=""
                     loading="eager"
                     decoding="sync"
@@ -6419,7 +6481,7 @@
                 <img
                   id="master-amano"
                   class="asia-master-cutout asia-master-cutout--amano"
-                  src="/assets/aistudio/recorte_amano_85381ddb.png"
+                  src="docs/imagenes/recorte_amano.png"
                   alt="Ilustración en tinta de Yoshitaka Amano"
                   loading="eager"
                   decoding="sync"
@@ -6427,7 +6489,7 @@
                 <img
                   id="master-kojima"
                   class="asia-master-cutout asia-master-cutout--kojima"
-                  src="/assets/aistudio/recorte_kojima_7e741712.png"
+                  src="docs/imagenes/recorte_kojima.png"
                   alt="Ilustración en tinta de Hideo Kojima"
                   loading="eager"
                   decoding="sync"
@@ -6435,7 +6497,7 @@
                 <img
                   id="master-miyamoto"
                   class="asia-master-cutout asia-master-cutout--miyamoto"
-                  src="/assets/aistudio/recorte_miyamoto_2a3da1f2.png"
+                  src="docs/imagenes/recorte_miyamoto.png"
                   alt="Ilustración en tinta de Shigeru Miyamoto"
                   loading="eager"
                   decoding="sync"
@@ -9470,19 +9532,27 @@ Tencent;Mundfish;Chipre;2021;Desconocido;Desconocido;`;
             startInkAnimation();
           }
 
-          const fallbackId = window.setTimeout(maybeStart, 900);
+          const fallbackId = window.setTimeout(maybeStart, 1800);
           templeTasks.forEach((task) => {
             const img = new Image();
             img.decoding = 'async';
             img.onload = () => {
               task.img = img;
               loaded += 1;
+              if (portadaEl.dataset.inkState === 'drawn') {
+                renderFinalTemple(task);
+              }
               if (loaded >= templeTasks.length) {
                 window.clearTimeout(fallbackId);
                 maybeStart();
               }
             };
             img.onerror = () => {
+              if (!img.dataset.docsFallbackTried && task.src && task.src.startsWith('docs/')) {
+                img.dataset.docsFallbackTried = '1';
+                img.src = task.src.slice(5);
+                return;
+              }
               loaded += 1;
               if (loaded >= templeTasks.length) {
                 window.clearTimeout(fallbackId);
@@ -11592,22 +11662,26 @@ Tencent;Mundfish;Chipre;2021;Desconocido;Desconocido;`;
         };
 
         const COVER_IMAGE_BY_TITLE = {
+          // Riot Games
           'League of Legends': 'docs/imagenes/portadas/portada_leagueoflegends.webp',
           Valorant: 'docs/imagenes/portadas/portada_valorant.webp',
           'Teamfight Tactics': 'docs/imagenes/portadas/portada_teamfighttactics.webp',
           'Legends of Runeterra': 'docs/imagenes/portadas/portada_legendsofrutanerra.webp',
           'League of Legends: Wild Rift': 'docs/imagenes/portadas/portada_wildrift.webp',
+          // Epic Games
           Fortnite: 'docs/imagenes/portadas/portada_fortnite.webp',
           'Gears of War (entregas originales)': 'docs/imagenes/portadas/portada_gearsofwar.webp',
           'Unreal Tournament': 'docs/imagenes/portadas/portada_unrealtournament.webp',
           'Infinity Blade': 'docs/imagenes/portadas/portada_infinityblade.webp',
           'Fall Guys (vía Mediatonic)': 'docs/imagenes/portadas/portada_fallguys.webp',
+          // Krafton & Bluehole Studio
           'PUBG: Battlegrounds': 'docs/imagenes/portadas/portada_pubg.webp',
           'PUBG: Battlegrounds (etapa Bluehole)': 'docs/imagenes/portadas/portada_pubg.webp',
           'The Callisto Protocol': 'docs/imagenes/portadas/portada_callistoprotocol.webp',
           TERA: 'docs/imagenes/portadas/portada_tera.webp',
           Moonbreaker: 'docs/imagenes/portadas/portada_moonbreaker.webp',
           'Defense Derby': 'docs/imagenes/portadas/portada_defensederby.webp',
+          // FromSoftware & Kadokawa
           'Elden Ring': 'docs/imagenes/portadas/portada_eldenring.webp',
           'Elden Ring (vía FromSoftware)': 'docs/imagenes/portadas/portada_eldenring.webp',
           'Dark Souls': 'docs/imagenes/portadas/portada_darksouls.webp',
@@ -11615,11 +11689,70 @@ Tencent;Mundfish;Chipre;2021;Desconocido;Desconocido;`;
           Bloodborne: 'docs/imagenes/portadas/portada_bloodborne.webp',
           'Sekiro: Shadows Die Twice': 'docs/imagenes/portadas/portada_sekiro.webp',
           'Armored Core': 'docs/imagenes/portadas/portada_armoredcore.webp',
+          // Larian Studios
           "Baldur's Gate 3": 'docs/imagenes/portadas/portada_baldursgate3.webp',
           'Divinity: Original Sin 2': 'docs/imagenes/portadas/portada_divinityoriginalsin2.webp',
           'Divinity: Original Sin': 'docs/imagenes/portadas/portada_divinityoriginalsin.webp',
           'Divine Divinity': 'docs/imagenes/portadas/portada_divinedivinity.webp',
           'Beyond Divinity': 'docs/imagenes/portadas/portada_beyonddivinity.webp',
+          // Ubisoft
+          "Assassin's Creed": 'docs/imagenes/portadas/portada_assasinscreed.webp',
+          'Far Cry': 'docs/imagenes/portadas/portada_farcry.webp',
+          "Tom Clancy's Rainbow Six Siege": 'docs/imagenes/portadas/portada_rainboiwsix.webp',
+          'Just Dance': 'docs/imagenes/portadas/portada_justdance.webp',
+          'Watch Dogs': 'docs/imagenes/portadas/portada_watchdog.webp',
+          // Activision Blizzard
+          'Call of Duty': 'docs/imagenes/portadas/portada_callofduty.webp',
+          'World of Warcraft': 'docs/imagenes/portadas/portada_worldofwarcraft.webp',
+          Diablo: 'docs/imagenes/portadas/portada_diablo.webp',
+          StarCraft: 'docs/imagenes/portadas/portada_starcraft.webp',
+          Overwatch: 'docs/imagenes/portadas/portada_overwatch.webp',
+          // Grinding Gear Games
+          'Path of Exile': 'docs/imagenes/portadas/portada_pathofexile.webp',
+          'Path of Exile 2': 'docs/imagenes/portadas/portada_pathofexile2.webp',
+          // Remedy Entertainment
+          'Alan Wake': 'docs/imagenes/portadas/portada_alanwake.webp',
+          Control: 'docs/imagenes/portadas/portada_control.webp',
+          'Max Payne': 'docs/imagenes/portadas/portada_maxpayne2.webp',
+          'Quantum Break': 'docs/imagenes/portadas/portada_quantumbreak.webp',
+          'Alan Wake 2': 'docs/imagenes/portadas/portada_alanwake2.webp',
+          // Leyou Technologies
+          'Warframe (vía Digital Extremes)': 'docs/imagenes/portadas/portada_warframe.webp',
+          'Dirty Bomb (vía Splash Damage)': 'docs/imagenes/portadas/portada_dirtybomb.webp',
+          Brink: 'docs/imagenes/portadas/portada_brink.webp',
+          'Gears Tactics': 'docs/imagenes/portadas/portada_gearstactics.webp',
+          'The Darkness II': 'docs/imagenes/portadas/portada_darkness2.webp',
+          // Certain Affinity
+          'Crimson Alliance': 'docs/imagenes/portadas/portada_crimsonalliance.webp',
+          'Age of Booty': 'docs/imagenes/portadas/portada_booty.webp',
+          // Supercell
+          'Clash of Clans': 'docs/imagenes/portadas/portada_clashofclans.webp',
+          'Clash Royale': 'docs/imagenes/portadas/portada_clashroyale.webp',
+          'Brawl Stars': 'docs/imagenes/portadas/portada_brawlstars.webp',
+          'Hay Day': 'docs/imagenes/portadas/portada_hayday.webp',
+          'Boom Beach': 'docs/imagenes/portadas/portada_boombeach.webp',
+          // Techland
+          'Dying Light': 'docs/imagenes/portadas/portada_dyinglight.webp',
+          'Dying Light 2 Stay Human': 'docs/imagenes/portadas/portada_dyinglight2.webp',
+          'Dead Island': 'docs/imagenes/portadas/portada_deadisland.webp',
+          'Call of Juarez': 'docs/imagenes/portadas/portada_callofjuarez.webp',
+          'Dead Island: Riptide': 'docs/imagenes/portadas/portada_deadisland2.webp',
+          // Turtle Rock Studios
+          'Left 4 Dead': 'docs/imagenes/portadas/portada_left4dead.webp',
+          'Back 4 Blood': 'docs/imagenes/portadas/portada_back4blood.webp',
+          Evolve: 'docs/imagenes/portadas/portada_evolve.webp',
+          // Inflexion Games
+          Nightingale: 'docs/imagenes/portadas/portada_nightgale.webp',
+          // Platinum Games
+          Bayonetta: 'docs/imagenes/portadas/portada_bayonetta.webp',
+          'NieR:Automata': 'docs/imagenes/portadas/portada_nierautomata.webp',
+          'Metal Gear Rising: Revengeance': 'docs/imagenes/portadas/portada_metalgearrising.webp',
+          'Astral Chain': 'docs/imagenes/portadas/portada_astralchain.webp',
+          Vanquish: 'docs/imagenes/portadas/portada_vanquish.webp',
+          // Yager
+          'Spec Ops: The Line': 'docs/imagenes/portadas/portada_specopstheline.webp',
+          'The Cycle: Frontier': 'docs/imagenes/portadas/portada_cycle.webp',
+          Dreadnought: 'docs/imagenes/portadas/portada_dreadnought.webp',
         };
 
         const GAMES = GALLERY_STUDIOS.flatMap((studioEntry) =>
@@ -11866,12 +11999,21 @@ Tencent;Mundfish;Chipre;2021;Desconocido;Desconocido;`;
             const coverEl = card.querySelector('.steam-card-cover');
             const img = document.createElement('img');
             img.className = 'steam-card-img';
-            img.src = game.coverImage;
+            const resolvedSrc =
+              typeof window.__resolveDocsPath === 'function'
+                ? window.__resolveDocsPath(game.coverImage)
+                : game.coverImage;
+            img.src = resolvedSrc;
+            if (resolvedSrc !== game.coverImage) {
+              img.dataset.docsFallbackTried = '1';
+              img.dataset.fallbackTried = '1';
+            }
             img.alt = isClone ? '' : `Portada de ${game.title}`;
             img.loading = rowPos < 8 ? 'eager' : 'lazy';
             img.decoding = 'async';
             img.addEventListener('error', () => {
               if (!img.dataset.fallbackTried && game.coverImage.startsWith('docs/')) {
+                img.dataset.docsFallbackTried = '1';
                 img.dataset.fallbackTried = '1';
                 img.src = game.coverImage.slice(5);
               } else {
